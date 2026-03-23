@@ -5,6 +5,7 @@
   import HistoryPage from '$lib/components/pages/HistoryPage.svelte';
   import NetworksPage from '$lib/components/pages/NetworksPage.svelte';
   import DnsPage from '$lib/components/pages/DnsPage.svelte';
+  import DevicesPage from '$lib/components/pages/DevicesPage.svelte';
   import { connectSSE, connected, info } from '$lib/stores/sse';
   import { formatUptime } from '$lib/utils/format';
 
@@ -73,6 +74,8 @@
           <NetworksPage />
         {:else if currentPage === 'dns'}
           <DnsPage />
+        {:else if currentPage === 'devices'}
+          <DevicesPage />
         {:else}
           <h2 class="text-lg font-semibold capitalize text-[var(--text)]">{currentPage}</h2>
         {/if}
