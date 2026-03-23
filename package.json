@@ -7,8 +7,10 @@
     "devwifi": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:web && tsc",
+    "build:web": "cd web && npm install && npm run build",
     "dev": "tsx src/index.ts",
+    "dev:web": "cd web && npm run dev",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -27,7 +29,8 @@
   "author": "",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist",
+    "web/dist"
   ],
   "engines": {
     "node": ">=18"

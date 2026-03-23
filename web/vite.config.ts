@@ -11,4 +11,14 @@ export default defineConfig({
       $lib: path.resolve('./src/lib'),
     },
   },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3142',
+      '/events': 'http://localhost:3142',
+    },
+  },
 })
