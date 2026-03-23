@@ -1,4 +1,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'http';
+import { join, dirname, extname } from 'path';
+import { fileURLToPath } from 'url';
+import { readFile as fsReadFile } from 'fs/promises';
+import { existsSync } from 'fs';
 import chalk from 'chalk';
 import ora from 'ora';
 import { NetworkMonitor, formatBytes } from '../utils/monitor.js';
@@ -8,7 +12,20 @@ import { listSavedNetworks, getPassword, getWifiInfo } from '../utils/wifi.js';
 import { scanNetwork } from '../utils/scanner.js';
 import { loadHistory, saveHistory, loadAlerts, saveAlerts, type AlertRule } from '../utils/store.js';
 import { checkAlerts, getAlertLog } from '../utils/alerts.js';
-import { getDashboardHTML } from '../dashboard.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const WEB_DIST = join(__dirname, '..', '..', 'web', 'dist');
+
+const MIME_TYPES: Record<string, string> = {
+  '.html': 'text/html',
+  '.js': 'application/javascript',
+  '.css': 'text/css',
+  '.svg': 'image/svg+xml',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
+};
 
 export async function monitorCommand(options: { port?: string; interval?: string }): Promise<void> {
   const port = parseInt(options.port ?? '3142');
@@ -244,9 +261,31 @@ export async function monitorCommand(options: { port?: string; interval?: string
       });
     }
 
-    // ── HTML Dashboard ──
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.end(getDashboardHTML());
+    // ── Static file serving (Svelte SPA) ──
+    if (!existsSync(WEB_DIST)) {
+      res.writeHead(503, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end('<h1>Dashboard not built</h1><p>Run <code>npm run build:web</code> first.</p>');
+      return;
+    }
+
+    // Determine the file to serve
+    let filePath = join(WEB_DIST, url === '/' ? 'index.html' : url);
+    const ext = extname(filePath);
+
+    // If no extension or file doesn't exist, serve index.html (SPA fallback)
+    if (!ext || !existsSync(filePath)) {
+      filePath = join(WEB_DIST, 'index.html');
+    }
+
+    try {
+      const data = await fsReadFile(filePath);
+      const mimeType = MIME_TYPES[extname(filePath)] ?? 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': mimeType });
+      res.end(data);
+    } catch {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Not found');
+    }
   });
 
   await monitor.start();
