@@ -32,31 +32,25 @@
   });
 </script>
 
-<div class="flex h-screen bg-[var(--bg)] text-[var(--text)] overflow-hidden">
-  <!-- Sidebar -->
+<div class="flex h-screen overflow-hidden">
   <Sidebar {currentPage} onNavigate={navigate} />
 
-  <!-- Main content -->
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <!-- Top bar -->
-    <header class="flex items-center justify-between px-6 py-3 border-b border-[var(--border)] bg-[var(--surface)] shrink-0">
-      <h1 class="text-sm font-semibold text-[var(--text)]">
+    <header class="flex items-center justify-between px-6 h-14 border-b border-border bg-card shrink-0">
+      <h1 class="text-sm font-semibold">
         {pageTitles[currentPage] ?? currentPage}
       </h1>
 
       <div class="flex items-center gap-4">
-        <!-- Uptime -->
-        <span class="text-xs font-mono text-[var(--dim)]">{uptime}</span>
+        <span class="text-xs font-mono tabular-nums text-muted-foreground">{uptime}</span>
 
-        <!-- LIVE indicator -->
         <div class="flex items-center gap-1.5">
           <span
-            class="w-1.5 h-1.5 rounded-full
-              {$connected ? 'bg-[var(--green)] shadow-[0_0_5px_var(--green)]' : 'bg-[var(--red)]'}"
+            class="w-1.5 h-1.5 rounded-full {$connected ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]' : 'bg-red-500'}"
           ></span>
           <span
-            class="text-[10px] font-semibold uppercase tracking-widest
-              {$connected ? 'text-[var(--green)]' : 'text-[var(--red)]'}"
+            class="text-[10px] font-semibold uppercase tracking-[0.1em] {$connected ? 'text-green-500' : 'text-red-500'}"
           >
             {$connected ? 'Live' : 'Offline'}
           </span>
@@ -64,9 +58,8 @@
       </div>
     </header>
 
-    <!-- Page area -->
     <main class="flex-1 overflow-y-auto">
-      <div class="p-6">
+      <div class="p-5">
         {#if currentPage === 'dashboard'}
           <DashboardPage />
         {:else if currentPage === 'history'}
@@ -79,8 +72,6 @@
           <DevicesPage />
         {:else if currentPage === 'alerts'}
           <AlertsPage />
-        {:else}
-          <h2 class="text-lg font-semibold capitalize text-[var(--text)]">{currentPage}</h2>
         {/if}
       </div>
     </main>
