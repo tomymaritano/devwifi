@@ -59,6 +59,14 @@
   --radius: 0.625rem;
 }
 
+/* Tailwind v4 defaults border-color to currentColor.
+   Override so all `border` utilities use our theme border. */
+*,
+*::before,
+*::after {
+  border-color: var(--color-border);
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
