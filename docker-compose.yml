@@ -1,0 +1,10 @@
+services:
+  devwifi-monitor:
+    build: .
+    container_name: devwifi-monitor
+    ports:
+      - "3142:3142"
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
