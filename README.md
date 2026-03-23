@@ -4,7 +4,7 @@ A developer-first CLI for diagnosing, inspecting, monitoring, and sharing Wi-Fi 
 
 Fast. Beautiful. Cross-platform.
 
-Built with the philosophy of [Guillermo Rauch](https://rauchg.com/)'s CLI tools: simple commands, minimal dependencies, beautiful output, fast execution.
+CLI tools: simple commands, minimal dependencies, beautiful output, fast execution.
 
 ## Install
 
