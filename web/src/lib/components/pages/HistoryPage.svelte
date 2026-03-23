@@ -123,7 +123,7 @@
         <Select.Trigger class="w-[140px] bg-card border-border text-foreground">
           {ranges.find((r) => r.value === selectedRange)?.label ?? selectedRange}
         </Select.Trigger>
-        <Select.Content class="bg-card border-border">
+        <Select.Content >
           {#each ranges as range}
             <Select.Item value={range.value} label={range.label} class="text-foreground">
               {range.label}
@@ -146,7 +146,7 @@
 
   <!-- Summary Stats -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <Card class="bg-card border-border">
+    <Card >
       <CardHeader class="pb-2 pt-4 px-4">
         <span class="text-xs font-medium text-muted-foreground">Avg Download</span>
       </CardHeader>
@@ -156,7 +156,7 @@
       </CardContent>
     </Card>
 
-    <Card class="bg-card border-border">
+    <Card >
       <CardHeader class="pb-2 pt-4 px-4">
         <span class="text-xs font-medium text-muted-foreground">Avg Upload</span>
       </CardHeader>
@@ -166,7 +166,7 @@
       </CardContent>
     </Card>
 
-    <Card class="bg-card border-border">
+    <Card >
       <CardHeader class="pb-2 pt-4 px-4">
         <span class="text-xs font-medium text-muted-foreground">Avg Latency</span>
       </CardHeader>
@@ -176,7 +176,7 @@
       </CardContent>
     </Card>
 
-    <Card class="bg-card border-border">
+    <Card >
       <CardHeader class="pb-2 pt-4 px-4">
         <span class="text-xs font-medium text-muted-foreground">Total Transfer</span>
       </CardHeader>
@@ -189,7 +189,7 @@
 
   <!-- Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <Card class="bg-card border-border">
+    <Card >
       <CardHeader class="pb-2 pt-4 px-4">
         <CardTitle class="text-sm font-medium text-foreground">Bandwidth</CardTitle>
       </CardHeader>
@@ -204,7 +204,7 @@
       </CardContent>
     </Card>
 
-    <Card class="bg-card border-border">
+    <Card >
       <CardHeader class="pb-2 pt-4 px-4">
         <CardTitle class="text-sm font-medium text-foreground">Latency</CardTitle>
       </CardHeader>

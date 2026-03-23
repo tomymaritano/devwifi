@@ -122,7 +122,7 @@
   </div>
 
   <!-- Table -->
-  <Card class="bg-card border-border">
+  <Card >
     <CardContent class="px-0 pb-0 pt-0">
       <Table.Root>
         <Table.Header>

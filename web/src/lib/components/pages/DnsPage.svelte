@@ -122,7 +122,7 @@
 
 <div class="space-y-8">
   <!-- Current DNS -->
-  <Card class="bg-card border-border">
+  <Card >
     <CardHeader class="pb-2 pt-4 px-4">
       <div class="flex items-center gap-2">
         <Globe class="text-muted-foreground" size={14} />
@@ -189,10 +189,10 @@
               <p class="text-[11px] text-muted-foreground mb-2">{preset.description}</p>
               <div class="space-y-0.5">
                 <p class="text-[11px] font-mono text-foreground">
-                  <span class="text-muted-foreground">Primary   </span>{preset.primary}
+                  <span class="text-muted-foreground mr-2">Primary</span>{preset.primary}
                 </p>
                 <p class="text-[11px] font-mono text-foreground">
-                  <span class="text-muted-foreground">Secondary </span>{preset.secondary}
+                  <span class="text-muted-foreground mr-2">Secondary</span>{preset.secondary}
                 </p>
               </div>
             </div>
@@ -208,7 +208,7 @@
   <!-- Custom DNS -->
   <div>
     <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Custom DNS</h2>
-    <Card class="bg-card border-border">
+    <Card >
       <CardContent class="px-4 py-4">
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="flex-1">
@@ -239,7 +239,9 @@
             <Button
               onclick={handleCustomApply}
               disabled={applying || !customPrimary.trim()}
-              class="bg-foreground text-background hover:opacity-90 text-xs font-medium h-9 px-5 whitespace-nowrap"
+              variant="default"
+              size="sm"
+              class="whitespace-nowrap"
             >
               {#if applying}
                 <Loader size={12} class="animate-spin mr-1.5" />

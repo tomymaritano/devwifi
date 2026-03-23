@@ -55,7 +55,9 @@
     <Button
       onclick={scanDevices}
       disabled={scanning}
-      class="bg-foreground text-background hover:opacity-90 text-xs font-medium h-8 px-4 gap-2"
+      variant="default"
+      size="sm"
+      class="gap-2"
     >
       {#if scanning}
         <Loader size={13} class="animate-spin" />
@@ -68,7 +70,7 @@
   </div>
 
   <!-- Table / Empty state -->
-  <Card class="bg-card border-border">
+  <Card >
     <CardContent class="px-0 pb-0 pt-0">
       <Table.Root>
         <Table.Header>

@@ -91,7 +91,7 @@
   <!-- Add Rule Form -->
   <div>
     <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Add Alert Rule</h2>
-    <Card class="bg-card border-border">
+    <Card >
       <CardContent class="px-4 py-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
           <!-- Metric -->
@@ -159,7 +159,9 @@
         <Button
           onclick={handleAddRule}
           disabled={adding || !threshold}
-          class="bg-foreground text-background hover:opacity-90 text-xs font-medium h-8 px-4 gap-2"
+          variant="default"
+          size="sm"
+          class="gap-2"
         >
           <Plus size={13} />
           {adding ? 'Adding...' : 'Add Rule'}
@@ -178,7 +180,7 @@
         </Badge>
       {/if}
     </div>
-    <Card class="bg-card border-border">
+    <Card >
       <CardContent class="px-0 pb-0 pt-0">
         <Table.Root>
           <Table.Header>
@@ -254,7 +256,7 @@
         </Badge>
       {/if}
     </div>
-    <Card class="bg-card border-border">
+    <Card >
       <CardContent class="px-4 py-4">
         {#if mergedLog.length === 0}
           <div class="flex flex-col items-center gap-3 py-8 text-muted-foreground">
