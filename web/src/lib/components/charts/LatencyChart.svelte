@@ -14,7 +14,7 @@
   let canvas: HTMLCanvasElement;
   let chart: any = null;
 
-  function downsample(points: LatencyPoint[], maxPoints = 200): LatencyPoint[] {
+  function downsample(points: LatencyPoint[], maxPoints = 120): LatencyPoint[] {
     const valid = points.filter(p => p.ms >= 0);
     if (valid.length <= maxPoints) return valid;
     const step = Math.ceil(valid.length / maxPoints);

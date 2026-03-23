@@ -15,7 +15,7 @@
   let chart: any = null;
 
   // Downsample data for performance and readability
-  function downsample(points: BandwidthPoint[], maxPoints = 200): BandwidthPoint[] {
+  function downsample(points: BandwidthPoint[], maxPoints = 120): BandwidthPoint[] {
     if (points.length <= maxPoints) return points;
     const step = Math.ceil(points.length / maxPoints);
     const result: BandwidthPoint[] = [];
@@ -99,19 +99,7 @@
           padding: { left: 0, right: 8, top: 4, bottom: 0 },
         },
         plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            align: 'end',
-            labels: {
-              color: chartTheme.tick,
-              boxWidth: 8,
-              boxHeight: 2,
-              padding: 12,
-              font: { size: 10, family: 'Inter' },
-              usePointStyle: false,
-            },
-          },
+          legend: { display: false },
           tooltip: {
             backgroundColor: chartTheme.tooltip.bg,
             borderColor: chartTheme.tooltip.border,
