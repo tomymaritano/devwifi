@@ -1,11 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Card } from '$lib/components/ui/card';
   import * as Select from '$lib/components/ui/select';
   import { Button } from '$lib/components/ui/button';
   import BandwidthChart from '$lib/components/charts/BandwidthChart.svelte';
   import LatencyChart from '$lib/components/charts/LatencyChart.svelte';
-  import { Download, FileDown, FileJson, Clock } from 'lucide-svelte';
+  import Skeleton from '$lib/components/ui/skeleton.svelte';
+  import StatCard from '$lib/components/shared/StatCard.svelte';
+  import SectionHeader from '$lib/components/shared/SectionHeader.svelte';
+  import EmptyState from '$lib/components/shared/EmptyState.svelte';
+  import PageTransition from '$lib/components/shared/PageTransition.svelte';
+  import { Download, Upload, Gauge, ArrowUpDown, FileDown, FileJson, Clock, BarChart3 } from 'lucide-svelte';
   import type { BandwidthPoint, LatencyPoint } from '$lib/types';
 
   const ranges = [
@@ -19,6 +24,7 @@
   let bandwidthData: BandwidthPoint[] = $state([]);
   let latencyData: LatencyPoint[] = $state([]);
   let loading = $state(false);
+  let initialLoad = $state(true);
 
   let avgDownload = $derived(
     bandwidthData.length > 0
@@ -73,6 +79,7 @@
       latencyData = [];
     } finally {
       loading = false;
+      initialLoad = false;
     }
   }
 
@@ -114,109 +121,114 @@
   });
 </script>
 
-<div class="space-y-6">
-  <!-- Header Row -->
-  <div class="flex items-center justify-between gap-4 flex-wrap">
-    <div class="flex items-center gap-3">
-      <Clock class="text-muted-foreground" size={16} />
-      <Select.Root type="single" value={selectedRange} onValueChange={onRangeChange}>
-        <Select.Trigger class="w-[140px] bg-card border-border text-foreground">
-          {ranges.find((r) => r.value === selectedRange)?.label ?? selectedRange}
-        </Select.Trigger>
-        <Select.Content >
-          {#each ranges as range}
-            <Select.Item value={range.value} label={range.label} class="text-foreground">
-              {range.label}
-            </Select.Item>
-          {/each}
-        </Select.Content>
-      </Select.Root>
+<PageTransition>
+  <div class="space-y-3">
+    <!-- Header Row -->
+    <div class="flex items-center justify-between gap-4 flex-wrap" style="animation: fadeUp 0.4s 0ms both cubic-bezier(0.16,1,0.3,1)">
+      <div class="flex items-center gap-3">
+        <Clock class="text-muted-foreground opacity-50" size={13} />
+        <Select.Root type="single" value={selectedRange} onValueChange={onRangeChange}>
+          <Select.Trigger class="w-[140px] h-8 text-[11px] bg-card border-border text-foreground">
+            {ranges.find((r) => r.value === selectedRange)?.label ?? selectedRange}
+          </Select.Trigger>
+          <Select.Content>
+            {#each ranges as range}
+              <Select.Item value={range.value} label={range.label} class="text-foreground text-[11px]">
+                {range.label}
+              </Select.Item>
+            {/each}
+          </Select.Content>
+        </Select.Root>
+      </div>
+      <div class="flex items-center gap-2">
+        <Button variant="outline" size="sm" onclick={exportCSV} class="h-8 text-[11px] border-border text-muted-foreground hover:text-foreground gap-1.5">
+          <FileDown size={12} />
+          CSV
+        </Button>
+        <Button variant="outline" size="sm" onclick={exportJSON} class="h-8 text-[11px] border-border text-muted-foreground hover:text-foreground gap-1.5">
+          <FileJson size={12} />
+          JSON
+        </Button>
+      </div>
     </div>
-    <div class="flex items-center gap-2">
-      <Button variant="outline" size="sm" onclick={exportCSV} class="border-border text-muted-foreground hover:text-foreground">
-        <FileDown size={14} />
-        Export CSV
-      </Button>
-      <Button variant="outline" size="sm" onclick={exportJSON} class="border-border text-muted-foreground hover:text-foreground">
-        <FileJson size={14} />
-        Export JSON
-      </Button>
+
+    <!-- Stat Cards -->
+    {#if initialLoad}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+        {#each Array(4) as _, i}
+          <Card class="overflow-hidden">
+            <div class="px-4 py-3.5 space-y-2">
+              <Skeleton class="h-3 w-16" />
+              <Skeleton class="h-7 w-20" />
+              <Skeleton class="h-2.5 w-10" />
+            </div>
+          </Card>
+        {/each}
+      </div>
+    {:else}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+        <StatCard label="Avg Download" value={avgDownload.toFixed(1)} unit="Mbps" color="text-blue-400" icon={Download} delay={60} />
+        <StatCard label="Avg Upload" value={avgUpload.toFixed(1)} unit="Mbps" color="text-purple-400" icon={Upload} delay={120} />
+        <StatCard label="Avg Latency" value={avgLatency.toFixed(1)} unit="ms" color="text-green-400" icon={Gauge} delay={180} />
+        <StatCard label="Total Transfer" value={formatTransfer(totalTransferMb)} unit="estimated" color="text-foreground" icon={ArrowUpDown} delay={240} />
+      </div>
+    {/if}
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+      <Card style="animation: fadeUp 0.4s 300ms both cubic-bezier(0.16,1,0.3,1)">
+        <div class="px-4 pt-3.5 pb-1">
+          <SectionHeader icon={BarChart3} label="Bandwidth" />
+        </div>
+        <div class="px-4 pb-3 h-[240px]">
+          {#if loading || initialLoad}
+            <div class="flex flex-col items-center justify-center h-full gap-3">
+              <Skeleton class="w-full h-full rounded-lg" />
+            </div>
+          {:else if bandwidthData.length === 0}
+            <EmptyState icon={BarChart3} title="No bandwidth data" description="Data will appear once monitoring begins" />
+          {:else}
+            <div class="chart-enter">
+              <BandwidthChart data={bandwidthData} />
+            </div>
+          {/if}
+        </div>
+      </Card>
+
+      <Card style="animation: fadeUp 0.4s 360ms both cubic-bezier(0.16,1,0.3,1)">
+        <div class="px-4 pt-3.5 pb-1">
+          <SectionHeader icon={Gauge} label="Latency" />
+        </div>
+        <div class="px-4 pb-3 h-[240px]">
+          {#if loading || initialLoad}
+            <div class="flex flex-col items-center justify-center h-full gap-3">
+              <Skeleton class="w-full h-full rounded-lg" />
+            </div>
+          {:else if latencyData.length === 0}
+            <EmptyState icon={Gauge} title="No latency data" description="Data will appear once monitoring begins" />
+          {:else}
+            <div class="chart-enter">
+              <LatencyChart data={latencyData} />
+            </div>
+          {/if}
+        </div>
+      </Card>
     </div>
   </div>
+</PageTransition>
 
-  <!-- Summary Stats -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <Card >
-      <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-muted-foreground">Avg Download</span>
-      </CardHeader>
-      <CardContent class="px-4 pb-4 pt-0">
-        <p class="text-2xl font-bold text-blue-500 tabular-nums">{avgDownload.toFixed(1)}</p>
-        <p class="text-[10px] text-muted-foreground">Mbps</p>
-      </CardContent>
-    </Card>
+<style>
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-    <Card >
-      <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-muted-foreground">Avg Upload</span>
-      </CardHeader>
-      <CardContent class="px-4 pb-4 pt-0">
-        <p class="text-2xl font-bold text-purple-500 tabular-nums">{avgUpload.toFixed(1)}</p>
-        <p class="text-[10px] text-muted-foreground">Mbps</p>
-      </CardContent>
-    </Card>
+  .chart-enter {
+    animation: chartFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
 
-    <Card >
-      <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-muted-foreground">Avg Latency</span>
-      </CardHeader>
-      <CardContent class="px-4 pb-4 pt-0">
-        <p class="text-2xl font-bold text-green-500 tabular-nums">{avgLatency.toFixed(1)}</p>
-        <p class="text-[10px] text-muted-foreground">ms</p>
-      </CardContent>
-    </Card>
-
-    <Card >
-      <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-muted-foreground">Total Transfer</span>
-      </CardHeader>
-      <CardContent class="px-4 pb-4 pt-0">
-        <p class="text-2xl font-bold text-foreground tabular-nums">{formatTransfer(totalTransferMb)}</p>
-        <p class="text-[10px] text-muted-foreground">estimated</p>
-      </CardContent>
-    </Card>
-  </div>
-
-  <!-- Charts -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <Card >
-      <CardHeader class="pb-2 pt-4 px-4">
-        <CardTitle class="text-sm font-medium text-foreground">Bandwidth</CardTitle>
-      </CardHeader>
-      <CardContent class="px-4 pb-4 pt-0 h-[300px]">
-        {#if loading}
-          <div class="flex items-center justify-center h-full">
-            <span class="text-xs text-muted-foreground">Loading...</span>
-          </div>
-        {:else}
-          <BandwidthChart data={bandwidthData} />
-        {/if}
-      </CardContent>
-    </Card>
-
-    <Card >
-      <CardHeader class="pb-2 pt-4 px-4">
-        <CardTitle class="text-sm font-medium text-foreground">Latency</CardTitle>
-      </CardHeader>
-      <CardContent class="px-4 pb-4 pt-0 h-[300px]">
-        {#if loading}
-          <div class="flex items-center justify-center h-full">
-            <span class="text-xs text-muted-foreground">Loading...</span>
-          </div>
-        {:else}
-          <LatencyChart data={latencyData} />
-        {/if}
-      </CardContent>
-    </Card>
-  </div>
-</div>
+  @keyframes chartFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
