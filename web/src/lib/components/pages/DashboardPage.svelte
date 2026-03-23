@@ -13,112 +13,129 @@
   let lat = $derived($lastTick?.lat.ms ?? 0);
   let latClass = $derived(latencyColor(lat));
   let alerts = $derived(($alertLog ?? []).slice(-5).reverse());
+
+  const stats = $derived([
+    { label: 'Download', value: dl.toFixed(1), unit: 'Mbps', color: 'text-blue-400', glow: 'glow-blue', icon: Download },
+    { label: 'Upload', value: ul.toFixed(1), unit: 'Mbps', color: 'text-purple-400', glow: 'glow-purple', icon: Upload },
+    { label: 'Latency', value: lat < 0 ? '—' : lat.toFixed(0), unit: lat < 0 ? 'timeout' : 'ms', color: latClass, glow: '', icon: Gauge },
+    { label: 'Downloaded', value: $totalRx, unit: 'total', color: 'text-foreground', glow: '', icon: HardDrive },
+    { label: 'Uploaded', value: $totalTx, unit: 'total', color: 'text-foreground', glow: '', icon: ArrowUpFromLine },
+    { label: 'Peak', value: $peakDownload.toFixed(1), unit: 'Mbps', color: 'text-amber-400', glow: 'glow-yellow', icon: Zap },
+  ]);
 </script>
 
-<div class="space-y-4">
-  <!-- Stats -->
-  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
-    {#each [
-      { label: 'Download', value: `${dl.toFixed(1)}`, unit: 'Mbps', color: 'text-blue-500', icon: Download },
-      { label: 'Upload', value: `${ul.toFixed(1)}`, unit: 'Mbps', color: 'text-purple-500', icon: Upload },
-      { label: 'Latency', value: lat < 0 ? '—' : `${lat.toFixed(0)}`, unit: lat < 0 ? 'timeout' : 'ms', color: latClass, icon: Gauge },
-      { label: 'Downloaded', value: $totalRx, unit: 'received', color: '', icon: HardDrive },
-      { label: 'Uploaded', value: $totalTx, unit: 'sent', color: '', icon: ArrowUpFromLine },
-      { label: 'Peak', value: `${$peakDownload.toFixed(1)}`, unit: 'Mbps', color: 'text-yellow-500', icon: Zap },
-    ] as stat}
-      <Card>
-        <CardHeader class="pb-0">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">{stat.label}</span>
-            <stat.icon class="{stat.color || 'text-muted-foreground'} opacity-60" size={13} />
+<div class="space-y-3">
+  <!-- Stat Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2.5">
+    {#each stats as stat, i}
+      <Card class="group relative overflow-hidden" style="animation: fadeUp 0.4s {i * 60}ms both cubic-bezier(0.16,1,0.3,1)">
+        <div class="px-4 py-3.5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{stat.label}</span>
+            <stat.icon class="{stat.color} opacity-40 group-hover:opacity-70 transition-opacity duration-300" size={12} />
           </div>
-        </CardHeader>
-        <CardContent class="pt-1">
-          <p class="text-lg font-semibold {stat.color} tracking-tight tabular-nums leading-none">{stat.value}</p>
-          <p class="text-[10px] text-muted-foreground mt-1">{stat.unit}</p>
-        </CardContent>
+          <p class="text-[22px] font-semibold {stat.color} tracking-tight tabular-nums leading-none">{stat.value}</p>
+          <p class="text-[10px] text-muted-foreground mt-1 font-medium">{stat.unit}</p>
+        </div>
+        <!-- Subtle gradient glow on hover -->
+        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+             style="background: radial-gradient(ellipse at 50% 0%, hsla(217,92%,60%,0.03) 0%, transparent 70%)"></div>
       </Card>
     {/each}
   </div>
 
   <!-- Charts -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-    <Card>
-      <CardHeader class="pb-1">
-        <CardTitle class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Bandwidth</CardTitle>
-      </CardHeader>
-      <CardContent class="h-[240px]">
-        <BandwidthChart data={$bandwidthHistory} />
-      </CardContent>
-    </Card>
-    <Card>
-      <CardHeader class="pb-1">
-        <CardTitle class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Latency</CardTitle>
-      </CardHeader>
-      <CardContent class="h-[240px]">
-        <LatencyChart data={$latencyHistory} />
-      </CardContent>
-    </Card>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+    {#each [
+      { title: 'Bandwidth', component: BandwidthChart, data: $bandwidthHistory },
+      { title: 'Latency', component: LatencyChart, data: $latencyHistory },
+    ] as chart, i}
+      <Card style="animation: fadeUp 0.4s {(6 + i) * 60}ms both cubic-bezier(0.16,1,0.3,1)">
+        <div class="px-4 pt-3.5 pb-1">
+          <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{chart.title}</span>
+        </div>
+        <div class="px-4 pb-3 h-[220px]">
+          {#if chart.title === 'Bandwidth'}
+            <BandwidthChart data={chart.data} />
+          {:else}
+            <LatencyChart data={chart.data} />
+          {/if}
+        </div>
+      </Card>
+    {/each}
   </div>
 
-  <!-- Info -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-    <Card>
-      <CardHeader class="pb-1">
+  <!-- Info Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+    <Card style="animation: fadeUp 0.4s 500ms both cubic-bezier(0.16,1,0.3,1)">
+      <div class="px-4 pt-3.5 pb-1">
         <div class="flex items-center gap-1.5">
-          <Globe class="text-muted-foreground" size={13} />
-          <CardTitle class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Network</CardTitle>
+          <Globe class="text-muted-foreground" size={11} />
+          <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Network</span>
         </div>
-      </CardHeader>
-      <CardContent>
+      </div>
+      <div class="px-4 pb-3.5">
         {#if $info}
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             {#each [
               { label: 'Local IP', value: $info.localIP },
               { label: 'Gateway', value: $info.gateway },
               ...($info.dns ?? []).map((d, i) => ({ label: `DNS ${i + 1}`, value: d.address, badge: d.provider }))
             ] as row}
-              <div class="flex items-center justify-between text-xs">
-                <span class="text-muted-foreground">{row.label}</span>
+              <div class="flex items-center justify-between py-1">
+                <span class="text-[11px] text-muted-foreground">{row.label}</span>
                 <div class="flex items-center gap-1.5">
-                  <code class="text-foreground">{row.value}</code>
+                  <code class="text-[11px] font-mono text-foreground/80">{row.value}</code>
                   {#if row.badge}
-                    <Badge variant="secondary" class="text-[9px] h-4 px-1.5">{row.badge}</Badge>
+                    <span class="text-[9px] font-medium text-muted-foreground bg-secondary px-1.5 py-0.5 rounded-md">{row.badge}</span>
                   {/if}
                 </div>
               </div>
             {/each}
           </div>
         {:else}
-          <p class="text-xs text-muted-foreground">Waiting for data…</p>
+          <p class="text-[11px] text-muted-foreground py-2">Waiting for data…</p>
         {/if}
-      </CardContent>
+      </div>
     </Card>
 
-    <Card>
-      <CardHeader class="pb-1">
+    <Card style="animation: fadeUp 0.4s 560ms both cubic-bezier(0.16,1,0.3,1)">
+      <div class="px-4 pt-3.5 pb-1">
         <div class="flex items-center gap-1.5">
-          <AlertTriangle class="text-muted-foreground" size={13} />
-          <CardTitle class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Recent Alerts</CardTitle>
+          <AlertTriangle class="text-muted-foreground" size={11} />
+          <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Recent Alerts</span>
         </div>
-      </CardHeader>
-      <CardContent>
+      </div>
+      <div class="px-4 pb-3.5">
         {#if alerts.length > 0}
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             {#each alerts as alert}
-              <div class="flex items-start gap-2">
-                <div class="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-1 shrink-0"></div>
+              <div class="flex items-start gap-2 py-1">
+                <div class="w-1 h-1 rounded-full bg-amber-400 mt-1.5 shrink-0 glow-yellow"></div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs truncate">{alert.message}</p>
+                  <p class="text-[11px] truncate text-foreground/80">{alert.message}</p>
                   <p class="text-[10px] text-muted-foreground">{new Date(alert.timestamp).toLocaleTimeString()}</p>
                 </div>
               </div>
             {/each}
           </div>
         {:else}
-          <p class="text-xs text-muted-foreground">No recent alerts</p>
+          <p class="text-[11px] text-muted-foreground py-2">No recent alerts</p>
         {/if}
-      </CardContent>
+      </div>
     </Card>
   </div>
 </div>
+
+<style>
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -37,20 +37,25 @@
 
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <!-- Top bar -->
-    <header class="flex items-center justify-between px-6 h-14 border-b border-border bg-card shrink-0">
-      <h1 class="text-sm font-semibold">
+    <header class="flex items-center justify-between px-5 h-12 border-b border-border bg-card/30 backdrop-blur-md shrink-0">
+      <h1 class="text-[13px] font-semibold tracking-[-0.01em]">
         {pageTitles[currentPage] ?? currentPage}
       </h1>
 
-      <div class="flex items-center gap-4">
-        <span class="text-xs font-mono tabular-nums text-muted-foreground">{uptime}</span>
+      <div class="flex items-center gap-3">
+        <span class="text-[11px] font-mono tabular-nums text-muted-foreground/60">{uptime}</span>
 
-        <div class="flex items-center gap-1.5">
+        <div class="flex items-center gap-1.5 pl-3 border-l border-border">
+          <div class="relative">
+            <span
+              class="block w-[6px] h-[6px] rounded-full {$connected ? 'bg-emerald-400' : 'bg-red-400'}"
+            ></span>
+            {#if $connected}
+              <span class="absolute inset-0 w-[6px] h-[6px] rounded-full bg-emerald-400 animate-ping opacity-30"></span>
+            {/if}
+          </div>
           <span
-            class="w-1.5 h-1.5 rounded-full {$connected ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]' : 'bg-red-500'}"
-          ></span>
-          <span
-            class="text-[10px] font-semibold uppercase tracking-[0.1em] {$connected ? 'text-green-500' : 'text-red-500'}"
+            class="text-[10px] font-semibold uppercase tracking-[0.08em] {$connected ? 'text-emerald-400' : 'text-red-400'}"
           >
             {$connected ? 'Live' : 'Offline'}
           </span>
@@ -59,7 +64,7 @@
     </header>
 
     <main class="flex-1 overflow-y-auto">
-      <div class="p-5">
+      <div class="p-4 max-w-[1600px]">
         {#if currentPage === 'dashboard'}
           <DashboardPage />
         {:else if currentPage === 'history'}
