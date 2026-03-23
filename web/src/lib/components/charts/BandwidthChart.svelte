@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import type { BandwidthPoint } from '$lib/types';
+  import { chartTheme } from '$lib/config/chartTheme';
 
   declare const Chart: any;
 
@@ -23,8 +24,8 @@
           {
             label: 'Download',
             data: [],
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderColor: chartTheme.download,
+            backgroundColor: `${chartTheme.download}1a`,
             fill: true,
             pointRadius: 0,
             tension: 0.3,
@@ -33,8 +34,8 @@
           {
             label: 'Upload',
             data: [],
-            borderColor: '#a855f7',
-            backgroundColor: 'rgba(168, 85, 247, 0.1)',
+            borderColor: chartTheme.upload,
+            backgroundColor: `${chartTheme.upload}1a`,
             fill: true,
             pointRadius: 0,
             tension: 0.3,
@@ -55,7 +56,7 @@
             position: 'top',
             align: 'end',
             labels: {
-              color: '#71717a',
+              color: chartTheme.tick,
               boxWidth: 12,
               boxHeight: 2,
               padding: 16,
@@ -63,10 +64,10 @@
             },
           },
           tooltip: {
-            backgroundColor: '#18181b',
-            borderColor: '#27272a',
+            backgroundColor: chartTheme.tooltip.bg,
+            borderColor: chartTheme.tooltip.border,
             borderWidth: 1,
-            titleColor: '#fafafa',
+            titleColor: chartTheme.tooltip.text,
             bodyColor: '#a1a1aa',
             padding: 8,
             titleFont: { size: 11 },
@@ -79,18 +80,18 @@
         scales: {
           x: {
             type: 'time',
-            grid: { color: '#1a1a1f' },
-            ticks: { color: '#52525b', font: { size: 10 }, maxTicksLimit: 8 },
-            border: { color: '#27272a' },
+            grid: { color: chartTheme.grid },
+            ticks: { color: chartTheme.tick, font: { size: 10 }, maxTicksLimit: 8 },
+            border: { color: chartTheme.tooltip.border },
           },
           y: {
-            grid: { color: '#1a1a1f' },
+            grid: { color: chartTheme.grid },
             ticks: {
-              color: '#52525b',
+              color: chartTheme.tick,
               font: { size: 10 },
               callback: (v: number) => `${v} Mbps`,
             },
-            border: { color: '#27272a' },
+            border: { color: chartTheme.tooltip.border },
             beginAtZero: true,
           },
         },

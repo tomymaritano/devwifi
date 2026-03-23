@@ -122,24 +122,24 @@
 
 <div class="space-y-8">
   <!-- Current DNS -->
-  <Card class="bg-[var(--surface)] border-[var(--border)]">
+  <Card class="bg-card border-border">
     <CardHeader class="pb-2 pt-4 px-4">
       <div class="flex items-center gap-2">
-        <Globe class="text-[var(--dim)]" size={14} />
-        <CardTitle class="text-sm font-medium text-[var(--text)]">Current DNS Servers</CardTitle>
+        <Globe class="text-muted-foreground" size={14} />
+        <CardTitle class="text-sm font-medium text-foreground">Current DNS Servers</CardTitle>
       </div>
     </CardHeader>
     <CardContent class="px-4 pb-4 pt-0">
       {#if loadingCurrent}
-        <p class="text-xs text-[var(--dim)]">Loading...</p>
+        <p class="text-xs text-muted-foreground">Loading...</p>
       {:else if currentServers.length === 0}
-        <p class="text-xs text-[var(--dim)]">No DNS servers detected</p>
+        <p class="text-xs text-muted-foreground">No DNS servers detected</p>
       {:else}
         <div class="flex flex-wrap gap-3">
           {#each currentServers as server, i}
-            <div class="flex items-center gap-2 bg-[var(--bg)] border border-[var(--border)] rounded-md px-3 py-2">
-              <span class="text-[10px] text-[var(--dim)] uppercase tracking-wider">{i === 0 ? 'Primary' : 'Secondary'}</span>
-              <span class="text-xs font-mono text-[var(--text)]">{server.address}</span>
+            <div class="flex items-center gap-2 bg-background border border-border rounded-md px-3 py-2">
+              <span class="text-[10px] text-muted-foreground uppercase tracking-wider">{i === 0 ? 'Primary' : 'Secondary'}</span>
+              <span class="text-xs font-mono text-foreground">{server.address}</span>
               {#if server.provider}
                 <Badge variant="outline" class="text-[10px] px-1.5 py-0">{server.provider}</Badge>
               {/if}
@@ -169,16 +169,16 @@
 
   <!-- Preset Cards -->
   <div>
-    <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--dim)] mb-3">Quick Presets</h2>
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Quick Presets</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {#each PRESETS as preset}
         <button
           onclick={() => handlePresetClick(preset)}
           disabled={applying}
-          class="group text-left bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-4
-                 hover:border-[var(--text)]/30 hover:bg-[var(--surface2,var(--surface))]
+          class="group text-left bg-card border border-border rounded-lg px-4 py-4
+                 hover:border-foreground/30 hover:bg-muted
                  transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed
-                 focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--text)]/40"
+                 focus:outline-none focus-visible:ring-1 focus-visible:ring-foreground/40"
         >
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
@@ -186,17 +186,17 @@
                 <span class="w-2 h-2 rounded-full shrink-0 {preset.dot}"></span>
                 <span class="text-sm font-semibold {preset.color}">{preset.name}</span>
               </div>
-              <p class="text-[11px] text-[var(--dim)] mb-2">{preset.description}</p>
+              <p class="text-[11px] text-muted-foreground mb-2">{preset.description}</p>
               <div class="space-y-0.5">
-                <p class="text-[11px] font-mono text-[var(--text)]">
-                  <span class="text-[var(--dim)]">Primary   </span>{preset.primary}
+                <p class="text-[11px] font-mono text-foreground">
+                  <span class="text-muted-foreground">Primary   </span>{preset.primary}
                 </p>
-                <p class="text-[11px] font-mono text-[var(--text)]">
-                  <span class="text-[var(--dim)]">Secondary </span>{preset.secondary}
+                <p class="text-[11px] font-mono text-foreground">
+                  <span class="text-muted-foreground">Secondary </span>{preset.secondary}
                 </p>
               </div>
             </div>
-            <span class="text-[10px] text-[var(--dim)] group-hover:text-[var(--text)] transition-colors shrink-0 mt-0.5">
+            <span class="text-[10px] text-muted-foreground group-hover:text-foreground transition-colors shrink-0 mt-0.5">
               Apply →
             </span>
           </div>
@@ -207,12 +207,12 @@
 
   <!-- Custom DNS -->
   <div>
-    <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--dim)] mb-3">Custom DNS</h2>
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Custom DNS</h2>
+    <Card class="bg-card border-border">
       <CardContent class="px-4 py-4">
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="flex-1">
-            <label class="block text-[10px] text-[var(--dim)] uppercase tracking-wider mb-1.5" for="dns-primary">
+            <label class="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5" for="dns-primary">
               Primary DNS
             </label>
             <Input
@@ -220,26 +220,26 @@
               type="text"
               placeholder="e.g. 1.1.1.1"
               bind:value={customPrimary}
-              class="bg-[var(--bg)] border-[var(--border)] text-[var(--text)] placeholder:text-[var(--dim)] font-mono text-sm"
+              class="bg-background border-border text-foreground placeholder:text-muted-foreground font-mono text-sm"
             />
           </div>
           <div class="flex-1">
-            <label class="block text-[10px] text-[var(--dim)] uppercase tracking-wider mb-1.5" for="dns-secondary">
-              Secondary DNS <span class="normal-case text-[var(--dim)]">(optional)</span>
+            <label class="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5" for="dns-secondary">
+              Secondary DNS <span class="normal-case text-muted-foreground">(optional)</span>
             </label>
             <Input
               id="dns-secondary"
               type="text"
               placeholder="e.g. 1.0.0.1"
               bind:value={customSecondary}
-              class="bg-[var(--bg)] border-[var(--border)] text-[var(--text)] placeholder:text-[var(--dim)] font-mono text-sm"
+              class="bg-background border-border text-foreground placeholder:text-muted-foreground font-mono text-sm"
             />
           </div>
           <div class="flex items-end">
             <Button
               onclick={handleCustomApply}
               disabled={applying || !customPrimary.trim()}
-              class="bg-[var(--text)] text-[var(--bg)] hover:opacity-90 text-xs font-medium h-9 px-5 whitespace-nowrap"
+              class="bg-foreground text-background hover:opacity-90 text-xs font-medium h-9 px-5 whitespace-nowrap"
             >
               {#if applying}
                 <Loader size={12} class="animate-spin mr-1.5" />

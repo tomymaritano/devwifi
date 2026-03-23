@@ -20,7 +20,7 @@
     if (t.includes('raspberry') || t.includes('linux')) return 'bg-red-900/50 text-red-300 border-red-700';
     if (t.includes('google') || t.includes('chromecast')) return 'bg-green-900/50 text-green-300 border-green-700';
     if (t.includes('sony') || t.includes('lg') || t.includes('tv')) return 'bg-purple-900/50 text-purple-300 border-purple-700';
-    return 'bg-[var(--bg)] text-[var(--dim)] border-[var(--border)]';
+    return 'bg-background text-muted-foreground border-border';
   }
 
   async function scanDevices() {
@@ -42,11 +42,11 @@
   <!-- Header row -->
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <h2 class="text-sm font-semibold text-[var(--text)]">Network Devices</h2>
+      <h2 class="text-sm font-semibold text-foreground">Network Devices</h2>
       {#if hasScanned}
         <Badge
           variant="outline"
-          class="text-[10px] px-2 py-0 border-[var(--border)] text-[var(--dim)]"
+          class="text-[10px] px-2 py-0 border-border text-muted-foreground"
         >
           {devices.length} {devices.length === 1 ? 'device' : 'devices'}
         </Badge>
@@ -55,7 +55,7 @@
     <Button
       onclick={scanDevices}
       disabled={scanning}
-      class="bg-[var(--text)] text-[var(--bg)] hover:opacity-90 text-xs font-medium h-8 px-4 gap-2"
+      class="bg-foreground text-background hover:opacity-90 text-xs font-medium h-8 px-4 gap-2"
     >
       {#if scanning}
         <Loader size={13} class="animate-spin" />
@@ -68,40 +68,40 @@
   </div>
 
   <!-- Table / Empty state -->
-  <Card class="bg-[var(--surface)] border-[var(--border)]">
+  <Card class="bg-card border-border">
     <CardContent class="px-0 pb-0 pt-0">
       <Table.Root>
         <Table.Header>
-          <Table.Row class="border-[var(--border)] hover:bg-transparent">
-            <Table.Head class="text-[var(--dim)] pl-4">IP Address</Table.Head>
-            <Table.Head class="text-[var(--dim)]">MAC Address</Table.Head>
-            <Table.Head class="text-[var(--dim)]">Hostname</Table.Head>
-            <Table.Head class="text-[var(--dim)] pr-4">Vendor / Type</Table.Head>
+          <Table.Row class="border-border hover:bg-transparent">
+            <Table.Head class="text-muted-foreground pl-4">IP Address</Table.Head>
+            <Table.Head class="text-muted-foreground">MAC Address</Table.Head>
+            <Table.Head class="text-muted-foreground">Hostname</Table.Head>
+            <Table.Head class="text-muted-foreground pr-4">Vendor / Type</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {#if scanning}
-            <Table.Row class="border-[var(--border)]">
+            <Table.Row class="border-border">
               <Table.Cell colspan={4} class="text-center py-12">
-                <div class="flex flex-col items-center gap-3 text-[var(--dim)]">
+                <div class="flex flex-col items-center gap-3 text-muted-foreground">
                   <Loader size={20} class="animate-spin" />
                   <span class="text-xs">Scanning network for devices...</span>
                 </div>
               </Table.Cell>
             </Table.Row>
           {:else if !hasScanned}
-            <Table.Row class="border-[var(--border)]">
+            <Table.Row class="border-border">
               <Table.Cell colspan={4} class="text-center py-12">
-                <div class="flex flex-col items-center gap-3 text-[var(--dim)]">
+                <div class="flex flex-col items-center gap-3 text-muted-foreground">
                   <Wifi size={24} class="opacity-40" />
                   <span class="text-xs">Click Scan Network to discover devices</span>
                 </div>
               </Table.Cell>
             </Table.Row>
           {:else if devices.length === 0}
-            <Table.Row class="border-[var(--border)]">
+            <Table.Row class="border-border">
               <Table.Cell colspan={4} class="text-center py-12">
-                <div class="flex flex-col items-center gap-3 text-[var(--dim)]">
+                <div class="flex flex-col items-center gap-3 text-muted-foreground">
                   <HelpCircle size={20} class="opacity-40" />
                   <span class="text-xs">No devices found on the network</span>
                 </div>
@@ -109,18 +109,18 @@
             </Table.Row>
           {:else}
             {#each devices as device}
-              <Table.Row class="border-[var(--border)] hover:bg-[var(--surface2,var(--surface))]">
-                <Table.Cell class="pl-4 font-mono text-xs text-[var(--text)]">
+              <Table.Row class="border-border hover:bg-muted">
+                <Table.Cell class="pl-4 font-mono text-xs text-foreground">
                   {device.ip}
                 </Table.Cell>
-                <Table.Cell class="font-mono text-xs text-[var(--dim)]">
+                <Table.Cell class="font-mono text-xs text-muted-foreground">
                   {device.mac}
                 </Table.Cell>
-                <Table.Cell class="text-xs text-[var(--text)]">
+                <Table.Cell class="text-xs text-foreground">
                   {#if device.hostname}
                     {device.hostname}
                   {:else}
-                    <span class="text-[var(--dim)]">—</span>
+                    <span class="text-muted-foreground">—</span>
                   {/if}
                 </Table.Cell>
                 <Table.Cell class="pr-4">
@@ -132,7 +132,7 @@
                       {device.type}
                     </Badge>
                   {:else}
-                    <span class="text-xs text-[var(--dim)]">—</span>
+                    <span class="text-xs text-muted-foreground">—</span>
                   {/if}
                 </Table.Cell>
               </Table.Row>

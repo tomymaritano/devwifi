@@ -118,14 +118,14 @@
   <!-- Header Row -->
   <div class="flex items-center justify-between gap-4 flex-wrap">
     <div class="flex items-center gap-3">
-      <Clock class="text-[var(--dim)]" size={16} />
+      <Clock class="text-muted-foreground" size={16} />
       <Select.Root type="single" value={selectedRange} onValueChange={onRangeChange}>
-        <Select.Trigger class="w-[140px] bg-[var(--surface)] border-[var(--border)] text-[var(--text)]">
+        <Select.Trigger class="w-[140px] bg-card border-border text-foreground">
           {ranges.find((r) => r.value === selectedRange)?.label ?? selectedRange}
         </Select.Trigger>
-        <Select.Content class="bg-[var(--surface)] border-[var(--border)]">
+        <Select.Content class="bg-card border-border">
           {#each ranges as range}
-            <Select.Item value={range.value} label={range.label} class="text-[var(--text)]">
+            <Select.Item value={range.value} label={range.label} class="text-foreground">
               {range.label}
             </Select.Item>
           {/each}
@@ -133,11 +133,11 @@
       </Select.Root>
     </div>
     <div class="flex items-center gap-2">
-      <Button variant="outline" size="sm" onclick={exportCSV} class="border-[var(--border)] text-[var(--dim)] hover:text-[var(--text)]">
+      <Button variant="outline" size="sm" onclick={exportCSV} class="border-border text-muted-foreground hover:text-foreground">
         <FileDown size={14} />
         Export CSV
       </Button>
-      <Button variant="outline" size="sm" onclick={exportJSON} class="border-[var(--border)] text-[var(--dim)] hover:text-[var(--text)]">
+      <Button variant="outline" size="sm" onclick={exportJSON} class="border-border text-muted-foreground hover:text-foreground">
         <FileJson size={14} />
         Export JSON
       </Button>
@@ -146,57 +146,57 @@
 
   <!-- Summary Stats -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-[var(--dim)]">Avg Download</span>
+        <span class="text-xs font-medium text-muted-foreground">Avg Download</span>
       </CardHeader>
       <CardContent class="px-4 pb-4 pt-0">
         <p class="text-2xl font-bold text-blue-500 tabular-nums">{avgDownload.toFixed(1)}</p>
-        <p class="text-[10px] text-[var(--dim)]">Mbps</p>
+        <p class="text-[10px] text-muted-foreground">Mbps</p>
       </CardContent>
     </Card>
 
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-[var(--dim)]">Avg Upload</span>
+        <span class="text-xs font-medium text-muted-foreground">Avg Upload</span>
       </CardHeader>
       <CardContent class="px-4 pb-4 pt-0">
         <p class="text-2xl font-bold text-purple-500 tabular-nums">{avgUpload.toFixed(1)}</p>
-        <p class="text-[10px] text-[var(--dim)]">Mbps</p>
+        <p class="text-[10px] text-muted-foreground">Mbps</p>
       </CardContent>
     </Card>
 
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-[var(--dim)]">Avg Latency</span>
+        <span class="text-xs font-medium text-muted-foreground">Avg Latency</span>
       </CardHeader>
       <CardContent class="px-4 pb-4 pt-0">
         <p class="text-2xl font-bold text-green-500 tabular-nums">{avgLatency.toFixed(1)}</p>
-        <p class="text-[10px] text-[var(--dim)]">ms</p>
+        <p class="text-[10px] text-muted-foreground">ms</p>
       </CardContent>
     </Card>
 
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardHeader class="pb-2 pt-4 px-4">
-        <span class="text-xs font-medium text-[var(--dim)]">Total Transfer</span>
+        <span class="text-xs font-medium text-muted-foreground">Total Transfer</span>
       </CardHeader>
       <CardContent class="px-4 pb-4 pt-0">
-        <p class="text-2xl font-bold text-[var(--text)] tabular-nums">{formatTransfer(totalTransferMb)}</p>
-        <p class="text-[10px] text-[var(--dim)]">estimated</p>
+        <p class="text-2xl font-bold text-foreground tabular-nums">{formatTransfer(totalTransferMb)}</p>
+        <p class="text-[10px] text-muted-foreground">estimated</p>
       </CardContent>
     </Card>
   </div>
 
   <!-- Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardHeader class="pb-2 pt-4 px-4">
-        <CardTitle class="text-sm font-medium text-[var(--text)]">Bandwidth</CardTitle>
+        <CardTitle class="text-sm font-medium text-foreground">Bandwidth</CardTitle>
       </CardHeader>
       <CardContent class="px-4 pb-4 pt-0 h-[300px]">
         {#if loading}
           <div class="flex items-center justify-center h-full">
-            <span class="text-xs text-[var(--dim)]">Loading...</span>
+            <span class="text-xs text-muted-foreground">Loading...</span>
           </div>
         {:else}
           <BandwidthChart data={bandwidthData} />
@@ -204,14 +204,14 @@
       </CardContent>
     </Card>
 
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardHeader class="pb-2 pt-4 px-4">
-        <CardTitle class="text-sm font-medium text-[var(--text)]">Latency</CardTitle>
+        <CardTitle class="text-sm font-medium text-foreground">Latency</CardTitle>
       </CardHeader>
       <CardContent class="px-4 pb-4 pt-0 h-[300px]">
         {#if loading}
           <div class="flex items-center justify-center h-full">
-            <span class="text-xs text-[var(--dim)]">Loading...</span>
+            <span class="text-xs text-muted-foreground">Loading...</span>
           </div>
         {:else}
           <LatencyChart data={latencyData} />

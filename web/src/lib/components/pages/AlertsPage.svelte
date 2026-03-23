@@ -90,20 +90,20 @@
 <div class="space-y-8">
   <!-- Add Rule Form -->
   <div>
-    <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--dim)] mb-3">Add Alert Rule</h2>
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Add Alert Rule</h2>
+    <Card class="bg-card border-border">
       <CardContent class="px-4 py-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
           <!-- Metric -->
           <div>
-            <label class="block text-[10px] text-[var(--dim)] uppercase tracking-wider mb-1.5" for="alert-metric">
+            <label class="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5" for="alert-metric">
               Metric
             </label>
             <select
               id="alert-metric"
               bind:value={metric}
-              class="w-full h-9 rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 text-sm text-[var(--text)]
-                     focus:outline-none focus:ring-1 focus:ring-[var(--text)]/40 transition-shadow"
+              class="w-full h-9 rounded-md border border-border bg-background px-3 text-sm text-foreground
+                     focus:outline-none focus:ring-1 focus:ring-foreground/40 transition-shadow"
             >
               <option value="latency">Latency ms</option>
               <option value="download">Download Mbps</option>
@@ -113,14 +113,14 @@
 
           <!-- Condition -->
           <div>
-            <label class="block text-[10px] text-[var(--dim)] uppercase tracking-wider mb-1.5" for="alert-condition">
+            <label class="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5" for="alert-condition">
               Condition
             </label>
             <select
               id="alert-condition"
               bind:value={condition}
-              class="w-full h-9 rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 text-sm text-[var(--text)]
-                     focus:outline-none focus:ring-1 focus:ring-[var(--text)]/40 transition-shadow"
+              class="w-full h-9 rounded-md border border-border bg-background px-3 text-sm text-foreground
+                     focus:outline-none focus:ring-1 focus:ring-foreground/40 transition-shadow"
             >
               <option value="above">Above</option>
               <option value="below">Below</option>
@@ -129,7 +129,7 @@
 
           <!-- Threshold -->
           <div>
-            <label class="block text-[10px] text-[var(--dim)] uppercase tracking-wider mb-1.5" for="alert-threshold">
+            <label class="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5" for="alert-threshold">
               Threshold
             </label>
             <Input
@@ -137,21 +137,21 @@
               type="number"
               placeholder="e.g. 100"
               bind:value={threshold}
-              class="bg-[var(--bg)] border-[var(--border)] text-[var(--text)] placeholder:text-[var(--dim)] h-9"
+              class="bg-background border-border text-foreground placeholder:text-muted-foreground h-9"
             />
           </div>
 
           <!-- Webhook -->
           <div>
-            <label class="block text-[10px] text-[var(--dim)] uppercase tracking-wider mb-1.5" for="alert-webhook">
-              Webhook URL <span class="normal-case text-[var(--dim)]">(optional)</span>
+            <label class="block text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5" for="alert-webhook">
+              Webhook URL <span class="normal-case text-muted-foreground">(optional)</span>
             </label>
             <Input
               id="alert-webhook"
               type="text"
               placeholder="https://..."
               bind:value={webhookUrl}
-              class="bg-[var(--bg)] border-[var(--border)] text-[var(--text)] placeholder:text-[var(--dim)] h-9"
+              class="bg-background border-border text-foreground placeholder:text-muted-foreground h-9"
             />
           </div>
         </div>
@@ -159,7 +159,7 @@
         <Button
           onclick={handleAddRule}
           disabled={adding || !threshold}
-          class="bg-[var(--text)] text-[var(--bg)] hover:opacity-90 text-xs font-medium h-8 px-4 gap-2"
+          class="bg-foreground text-background hover:opacity-90 text-xs font-medium h-8 px-4 gap-2"
         >
           <Plus size={13} />
           {adding ? 'Adding...' : 'Add Rule'}
@@ -171,48 +171,48 @@
   <!-- Rules Table -->
   <div>
     <div class="flex items-center gap-3 mb-3">
-      <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--dim)]">Active Rules</h2>
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Active Rules</h2>
       {#if $alertRules.length > 0}
-        <Badge variant="outline" class="text-[10px] px-2 py-0 border-[var(--border)] text-[var(--dim)]">
+        <Badge variant="outline" class="text-[10px] px-2 py-0 border-border text-muted-foreground">
           {$alertRules.length}
         </Badge>
       {/if}
     </div>
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardContent class="px-0 pb-0 pt-0">
         <Table.Root>
           <Table.Header>
-            <Table.Row class="border-[var(--border)] hover:bg-transparent">
-              <Table.Head class="text-[var(--dim)] pl-4">Metric</Table.Head>
-              <Table.Head class="text-[var(--dim)]">Condition</Table.Head>
-              <Table.Head class="text-[var(--dim)]">Threshold</Table.Head>
-              <Table.Head class="text-[var(--dim)]">Webhook</Table.Head>
-              <Table.Head class="text-[var(--dim)]">Enabled</Table.Head>
-              <Table.Head class="text-[var(--dim)] pr-4 text-right">Actions</Table.Head>
+            <Table.Row class="border-border hover:bg-transparent">
+              <Table.Head class="text-muted-foreground pl-4">Metric</Table.Head>
+              <Table.Head class="text-muted-foreground">Condition</Table.Head>
+              <Table.Head class="text-muted-foreground">Threshold</Table.Head>
+              <Table.Head class="text-muted-foreground">Webhook</Table.Head>
+              <Table.Head class="text-muted-foreground">Enabled</Table.Head>
+              <Table.Head class="text-muted-foreground pr-4 text-right">Actions</Table.Head>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {#if $alertRules.length === 0}
-              <Table.Row class="border-[var(--border)]">
-                <Table.Cell colspan={6} class="text-center py-8 text-xs text-[var(--dim)]">
+              <Table.Row class="border-border">
+                <Table.Cell colspan={6} class="text-center py-8 text-xs text-muted-foreground">
                   No alert rules configured
                 </Table.Cell>
               </Table.Row>
             {:else}
               {#each $alertRules as rule (rule.id)}
-                <Table.Row class="border-[var(--border)] hover:bg-[var(--surface2,var(--surface))]">
+                <Table.Row class="border-border hover:bg-muted">
                   <Table.Cell class="pl-4">
-                    <Badge variant="outline" class="text-[10px] px-2 py-0 border-[var(--border)] text-[var(--text)]">
+                    <Badge variant="outline" class="text-[10px] px-2 py-0 border-border text-foreground">
                       {METRIC_LABELS[rule.metric] ?? rule.metric}
                     </Badge>
                   </Table.Cell>
-                  <Table.Cell class="text-xs text-[var(--dim)]">
+                  <Table.Cell class="text-xs text-muted-foreground">
                     {CONDITION_LABELS[rule.condition] ?? rule.condition}
                   </Table.Cell>
-                  <Table.Cell class="text-xs font-mono text-[var(--text)]">
+                  <Table.Cell class="text-xs font-mono text-foreground">
                     {rule.threshold}
                   </Table.Cell>
-                  <Table.Cell class="text-xs text-[var(--dim)] max-w-[180px] truncate">
+                  <Table.Cell class="text-xs text-muted-foreground max-w-[180px] truncate">
                     {#if rule.webhookUrl}
                       <span class="font-mono text-[10px]" title={rule.webhookUrl}>{rule.webhookUrl}</span>
                     {:else}
@@ -230,7 +230,7 @@
                       variant="ghost"
                       size="sm"
                       onclick={() => handleDelete(rule.id)}
-                      class="h-7 w-7 p-0 text-[var(--dim)] hover:text-red-400 hover:bg-red-950/30"
+                      class="h-7 w-7 p-0 text-muted-foreground hover:text-red-400 hover:bg-red-950/30"
                     >
                       <Trash2 size={13} />
                     </Button>
@@ -247,30 +247,30 @@
   <!-- Alert Log -->
   <div>
     <div class="flex items-center gap-3 mb-3">
-      <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--dim)]">Alert Log</h2>
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Alert Log</h2>
       {#if mergedLog.length > 0}
-        <Badge variant="outline" class="text-[10px] px-2 py-0 border-[var(--border)] text-[var(--dim)]">
+        <Badge variant="outline" class="text-[10px] px-2 py-0 border-border text-muted-foreground">
           {mergedLog.length}
         </Badge>
       {/if}
     </div>
-    <Card class="bg-[var(--surface)] border-[var(--border)]">
+    <Card class="bg-card border-border">
       <CardContent class="px-4 py-4">
         {#if mergedLog.length === 0}
-          <div class="flex flex-col items-center gap-3 py-8 text-[var(--dim)]">
+          <div class="flex flex-col items-center gap-3 py-8 text-muted-foreground">
             <Bell size={20} class="opacity-40" />
             <span class="text-xs">No alert events yet</span>
           </div>
         {:else}
-          <div class="space-y-0 divide-y divide-[var(--border)]">
+          <div class="space-y-0 divide-y divide-border">
             {#each mergedLog as event (event.timestamp + (event.rule?.id ?? ''))}
               <div class="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
                 <div class="mt-1 shrink-0">
                   <span class="block w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_5px_theme(colors.yellow.400)]"></span>
                 </div>
                 <div class="min-w-0 flex-1">
-                  <p class="text-xs text-[var(--text)] leading-relaxed">{event.message}</p>
-                  <p class="text-[10px] text-[var(--dim)] mt-0.5">{formatTs(event.timestamp)}</p>
+                  <p class="text-xs text-foreground leading-relaxed">{event.message}</p>
+                  <p class="text-[10px] text-muted-foreground mt-0.5">{formatTs(event.timestamp)}</p>
                 </div>
               </div>
             {/each}

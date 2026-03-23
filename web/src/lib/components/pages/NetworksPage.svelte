@@ -108,56 +108,56 @@
   <!-- Search -->
   <div class="flex items-center gap-3">
     <div class="relative flex-1 max-w-sm">
-      <Search class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--dim)]" size={14} />
+      <Search class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
       <Input
         type="text"
         placeholder="Search networks..."
         bind:value={search}
-        class="pl-9 bg-[var(--surface)] border-[var(--border)] text-[var(--text)] placeholder:text-[var(--dim)]"
+        class="pl-9 bg-card border-border text-foreground placeholder:text-muted-foreground"
       />
     </div>
-    <span class="text-xs text-[var(--dim)]">
+    <span class="text-xs text-muted-foreground">
       {filtered.length} network{filtered.length !== 1 ? 's' : ''}
     </span>
   </div>
 
   <!-- Table -->
-  <Card class="bg-[var(--surface)] border-[var(--border)]">
+  <Card class="bg-card border-border">
     <CardContent class="px-0 pb-0 pt-0">
       <Table.Root>
         <Table.Header>
-          <Table.Row class="border-[var(--border)] hover:bg-transparent">
-            <Table.Head class="text-[var(--dim)] w-12">#</Table.Head>
-            <Table.Head class="text-[var(--dim)]">Name</Table.Head>
-            <Table.Head class="text-[var(--dim)]">Password</Table.Head>
-            <Table.Head class="text-[var(--dim)] text-right">Actions</Table.Head>
+          <Table.Row class="border-border hover:bg-transparent">
+            <Table.Head class="text-muted-foreground w-12">#</Table.Head>
+            <Table.Head class="text-muted-foreground">Name</Table.Head>
+            <Table.Head class="text-muted-foreground">Password</Table.Head>
+            <Table.Head class="text-muted-foreground text-right">Actions</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {#if loading}
-            <Table.Row class="border-[var(--border)]">
-              <Table.Cell colspan={4} class="text-center text-xs text-[var(--dim)] py-8">
+            <Table.Row class="border-border">
+              <Table.Cell colspan={4} class="text-center text-xs text-muted-foreground py-8">
                 Loading networks...
               </Table.Cell>
             </Table.Row>
           {:else if filtered.length === 0}
-            <Table.Row class="border-[var(--border)]">
-              <Table.Cell colspan={4} class="text-center text-xs text-[var(--dim)] py-8">
+            <Table.Row class="border-border">
+              <Table.Cell colspan={4} class="text-center text-xs text-muted-foreground py-8">
                 {search ? 'No matching networks' : 'No saved networks found'}
               </Table.Cell>
             </Table.Row>
           {:else}
             {#each filtered as network, i}
-              <Table.Row class="border-[var(--border)] hover:bg-[var(--surface2)]">
-                <Table.Cell class="text-xs text-[var(--dim)] tabular-nums">{i + 1}</Table.Cell>
+              <Table.Row class="border-border hover:bg-muted">
+                <Table.Cell class="text-xs text-muted-foreground tabular-nums">{i + 1}</Table.Cell>
                 <Table.Cell>
                   <div class="flex items-center gap-2">
-                    <Wifi class="text-[var(--dim)]" size={14} />
-                    <span class="text-sm text-[var(--text)]">{network.name}</span>
+                    <Wifi class="text-muted-foreground" size={14} />
+                    <span class="text-sm text-foreground">{network.name}</span>
                   </div>
                 </Table.Cell>
                 <Table.Cell>
-                  <span class="text-sm font-mono text-[var(--dim)]">
+                  <span class="text-sm font-mono text-muted-foreground">
                     {#if visible[network.name] && passwords[network.name]}
                       {passwords[network.name]}
                     {:else}
@@ -172,7 +172,7 @@
                       size="icon-sm"
                       onclick={() => toggleVisibility(network.name)}
                       disabled={fetching[network.name]}
-                      class="text-[var(--dim)] hover:text-[var(--text)]"
+                      class="text-muted-foreground hover:text-foreground"
                     >
                       {#if visible[network.name]}
                         <EyeOff size={14} />
@@ -185,7 +185,7 @@
                       size="icon-sm"
                       onclick={() => copyPassword(network.name)}
                       disabled={fetching[network.name]}
-                      class="text-[var(--dim)] hover:text-[var(--text)]"
+                      class="text-muted-foreground hover:text-foreground"
                     >
                       {#if copied[network.name]}
                         <Check size={14} class="text-green-500" />
@@ -198,7 +198,7 @@
                       size="icon-sm"
                       onclick={() => showQR(network.name)}
                       disabled={fetching[network.name]}
-                      class="text-[var(--dim)] hover:text-[var(--text)]"
+                      class="text-muted-foreground hover:text-foreground"
                     >
                       <QrCode size={14} />
                     </Button>
@@ -215,23 +215,23 @@
 
 <!-- QR Dialog -->
 <Dialog.Root bind:open={qrOpen}>
-  <Dialog.Content class="bg-[var(--surface)] border-[var(--border)] sm:max-w-sm">
+  <Dialog.Content class="bg-card border-border sm:max-w-sm">
     <Dialog.Header>
-      <Dialog.Title class="text-[var(--text)]">Wi-Fi QR Code</Dialog.Title>
-      <Dialog.Description class="text-[var(--dim)]">
-        Scan to connect to <span class="font-mono font-semibold text-[var(--text)]">{qrNetwork}</span>
+      <Dialog.Title class="text-foreground">Wi-Fi QR Code</Dialog.Title>
+      <Dialog.Description class="text-muted-foreground">
+        Scan to connect to <span class="font-mono font-semibold text-foreground">{qrNetwork}</span>
       </Dialog.Description>
     </Dialog.Header>
     <div class="flex items-center justify-center py-4">
       {#if qrLoading}
         <div class="w-[280px] h-[280px] flex items-center justify-center">
-          <span class="text-xs text-[var(--dim)]">Generating...</span>
+          <span class="text-xs text-muted-foreground">Generating...</span>
         </div>
       {:else if qrDataUrl}
         <img src={qrDataUrl} alt="Wi-Fi QR Code for {qrNetwork}" class="rounded-lg" width="280" height="280" />
       {:else}
         <div class="w-[280px] h-[280px] flex items-center justify-center">
-          <span class="text-xs text-[var(--red)]">Failed to generate QR code</span>
+          <span class="text-xs text-destructive">Failed to generate QR code</span>
         </div>
       {/if}
     </div>
