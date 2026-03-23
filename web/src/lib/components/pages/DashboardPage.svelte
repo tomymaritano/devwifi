@@ -44,26 +44,30 @@
     {/each}
   </div>
 
-  <!-- Charts -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
-    {#each [
-      { title: 'Bandwidth', component: BandwidthChart, data: $bandwidthHistory },
-      { title: 'Latency', component: LatencyChart, data: $latencyHistory },
-    ] as chart, i}
-      <Card style="animation: fadeUp 0.4s {(6 + i) * 60}ms both cubic-bezier(0.16,1,0.3,1)">
-        <div class="px-4 pt-3.5 pb-1">
-          <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{chart.title}</span>
-        </div>
-        <div class="px-4 pb-3 h-[220px]">
-          {#if chart.title === 'Bandwidth'}
-            <BandwidthChart data={chart.data} />
-          {:else}
-            <LatencyChart data={chart.data} />
-          {/if}
-        </div>
-      </Card>
-    {/each}
-  </div>
+  <!-- Bandwidth Chart — full width for better readability -->
+  <Card style="animation: fadeUp 0.4s 360ms both cubic-bezier(0.16,1,0.3,1)">
+    <div class="px-4 pt-3.5 pb-0 flex items-center justify-between">
+      <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Bandwidth</span>
+      <div class="flex items-center gap-3 text-[9px] text-muted-foreground/60">
+        <span class="flex items-center gap-1"><span class="w-2 h-0.5 rounded bg-blue-400 inline-block"></span> Download</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-0.5 rounded bg-purple-400 inline-block"></span> Upload</span>
+      </div>
+    </div>
+    <div class="px-3 pb-3 h-[280px]">
+      <BandwidthChart data={$bandwidthHistory} />
+    </div>
+  </Card>
+
+  <!-- Latency Chart -->
+  <Card style="animation: fadeUp 0.4s 420ms both cubic-bezier(0.16,1,0.3,1)">
+    <div class="px-4 pt-3.5 pb-0 flex items-center justify-between">
+      <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Latency</span>
+      <span class="flex items-center gap-1 text-[9px] text-muted-foreground/60"><span class="w-2 h-0.5 rounded bg-green-400 inline-block"></span> ms</span>
+    </div>
+    <div class="px-3 pb-3 h-[200px]">
+      <LatencyChart data={$latencyHistory} />
+    </div>
+  </Card>
 
   <!-- Info Row -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
