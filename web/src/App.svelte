@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
+  import DashboardPage from '$lib/components/pages/DashboardPage.svelte';
   import { connectSSE, connected, info } from '$lib/stores/sse';
   import { formatUptime } from '$lib/utils/format';
 
@@ -61,7 +62,11 @@
     <!-- Page area -->
     <main class="flex-1 overflow-y-auto">
       <div class="p-6">
-        <h2 class="text-lg font-semibold capitalize text-[var(--text)]">{currentPage}</h2>
+        {#if currentPage === 'dashboard'}
+          <DashboardPage />
+        {:else}
+          <h2 class="text-lg font-semibold capitalize text-[var(--text)]">{currentPage}</h2>
+        {/if}
       </div>
     </main>
   </div>
